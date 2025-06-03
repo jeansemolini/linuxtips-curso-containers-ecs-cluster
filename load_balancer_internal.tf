@@ -33,8 +33,8 @@ resource "aws_security_group_rule" "internal_ingress_443" {
 }
 
 resource "aws_lb" "internal" {
-  name     = format("%s-internal", var.project_name)
-  internal = "true"
+  name               = format("%s-internal", var.project_name)
+  internal           = "true"
 
   load_balancer_type = "application"
 
@@ -63,5 +63,10 @@ resource "aws_lb_listener" "internal" {
       message_body = "LinuxTips Internal"
       status_code  = "200"
     }
+  }
+  
+  lifecycle {
+    create_before_destroy = true
+    ignore_changes = [default_action]  # opcional, para evitar planos desnecessários
   }
 }
